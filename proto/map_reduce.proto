@@ -5,7 +5,7 @@ import "google/protobuf/empty.proto";
 service Master {
     rpc StartReducer(Notification) returns (google.protobuf.Empty);
     rpc StartMapper(Notification) returns (google.protobuf.Empty);
-    rpc NotifyMaster(google.protobuf.Empty) returns (google.protobuf.Empty);
+    rpc NotifyMaster(Notification) returns (google.protobuf.Empty);
 }
 
 message Notification {

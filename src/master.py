@@ -7,12 +7,14 @@
 
 import os
 import grpc
+
 from concurrent import futures
 from threading import Lock
 from proto.map_reduce_pb2_grpc import MasterServicer, add_MasterServicer_to_server, MasterStub
 from proto.map_reduce_pb2 import Response, Notification
 from google.protobuf import empty_pb2 as EmptyResponse
 from pydantic import BaseModel
+from pathlib import Path
 
 class Config(BaseModel):
     input_path:str
@@ -66,7 +68,9 @@ def main():
     )
     
     master = Master(config = input_data)
+    os.system("python3 mapper.py")
     master.start()
+    
 
 if __name__=="__main__":
     main()
