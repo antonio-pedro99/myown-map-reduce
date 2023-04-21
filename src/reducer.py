@@ -1,7 +1,7 @@
 # skeleton for mapper.py
 # already have code to read input file from the $pwd/input/*.txt
 # space to input hte mapper function
-import reduce
+from functions.reduce import reduce
 
 def get_input():
     # get input from input files

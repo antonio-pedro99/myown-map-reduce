@@ -53,7 +53,6 @@ class Master(MasterServicer):
         return super().NotifyMaster(request, context)
     
 def main():
- 
     input_path = input("Enter the input data location: ")
     output_path = input("Enter the output data location: ")
     num_mappers = int(input("Enter the number of mappers: "))
