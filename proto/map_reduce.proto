@@ -1,0 +1,22 @@
+syntax = "proto3";
+package backup_protocol;
+import "google/protobuf/empty.proto";
+
+service Master {
+    rpc StartReducer(Notification) returns (google.protobuf.Empty);
+    rpc StartMapper(Notification) returns (google.protobuf.Empty);
+    rpc NotifyMaster(google.protobuf.Empty) returns (google.protobuf.Empty);
+}
+
+message Notification {
+    string path = 1;
+}
+
+message Response {
+    Status response=1;
+}
+
+enum Status {
+    SUCCESS = 0;
+    FAIL = 1;
+}
