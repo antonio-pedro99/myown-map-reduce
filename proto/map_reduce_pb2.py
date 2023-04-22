@@ -14,7 +14,7 @@ _sym_db = _symbol_database.Default()
 from google.protobuf import empty_pb2 as google_dot_protobuf_dot_empty__pb2
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x16proto/map_reduce.proto\x12\x0f\x62\x61\x63kup_protocol\x1a\x1bgoogle/protobuf/empty.proto\"\x1c\n\x0cNotification\x12\x0c\n\x04path\x18\x01 \x01(\t\"5\n\x08Response\x12)\n\x08response\x18\x01 \x01(\x0e\x32\x17.backup_protocol.Status*\x1f\n\x06Status\x12\x0b\n\x07SUCCESS\x10\x00\x12\x08\n\x04\x46\x41IL\x10\x01\x32\xd5\x01\n\x06Master\x12\x45\n\x0cStartReducer\x12\x1d.backup_protocol.Notification\x1a\x16.google.protobuf.Empty\x12\x44\n\x0bStartMapper\x12\x1d.backup_protocol.Notification\x1a\x16.google.protobuf.Empty\x12>\n\x0cNotifyMaster\x12\x16.google.protobuf.Empty\x1a\x16.google.protobuf.Emptyb\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x16proto/map_reduce.proto\x12\x0f\x62\x61\x63kup_protocol\x1a\x1bgoogle/protobuf/empty.proto\"\x1c\n\x0cNotification\x12\x0c\n\x04path\x18\x01 \x01(\t\"5\n\x08Response\x12)\n\x08response\x18\x01 \x01(\x0e\x32\x17.backup_protocol.Status*\x1f\n\x06Status\x12\x0b\n\x07SUCCESS\x10\x00\x12\x08\n\x04\x46\x41IL\x10\x01\x32O\n\x06Master\x12\x45\n\x0cNotifyMaster\x12\x1d.backup_protocol.Notification\x1a\x16.google.protobuf.Empty2O\n\x06Mapper\x12\x45\n\x0cStartReducer\x12\x1d.backup_protocol.Notification\x1a\x16.google.protobuf.Empty2O\n\x07Reducer\x12\x44\n\x0bStartMapper\x12\x1d.backup_protocol.Notification\x1a\x16.google.protobuf.Emptyb\x06proto3')
 
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, globals())
 _builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'proto.map_reduce_pb2', globals())
@@ -27,6 +27,10 @@ if _descriptor._USE_C_DESCRIPTORS == False:
   _NOTIFICATION._serialized_end=100
   _RESPONSE._serialized_start=102
   _RESPONSE._serialized_end=155
-  _MASTER._serialized_start=191
-  _MASTER._serialized_end=404
+  _MASTER._serialized_start=190
+  _MASTER._serialized_end=269
+  _MAPPER._serialized_start=271
+  _MAPPER._serialized_end=350
+  _REDUCER._serialized_start=352
+  _REDUCER._serialized_end=431
 # @@protoc_insertion_point(module_scope)

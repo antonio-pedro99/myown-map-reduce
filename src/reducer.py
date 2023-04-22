@@ -4,8 +4,8 @@
 import os
 from functions.reduce import reduce
 from pathlib import Path
-from proto.map_reduce_pb2_grpc import MasterServicer, add_MasterServicer_to_server, MasterStub
-from proto.map_reduce_pb2 import Response, Notification
+from ..proto.map_reduce_pb2_grpc import MasterServicer, add_MasterServicer_to_server, MasterStub
+from ..proto.map_reduce_pb2 import Response, Notification
 from google.protobuf import empty_pb2 as EmptyResponse
 from utils.record_reader import RecordReader
 

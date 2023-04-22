@@ -6,8 +6,11 @@
 # send the input files 
 
 import os
+# comming out of the master => to access the proto files
+import sys
+sys.path.append("..")
 import grpc
-
+from port import *
 from concurrent import futures
 from threading import Lock
 from proto.map_reduce_pb2_grpc import MasterServicer, add_MasterServicer_to_server, MasterStub
@@ -15,6 +18,7 @@ from proto.map_reduce_pb2 import Response, Notification
 from google.protobuf import empty_pb2 as EmptyResponse
 from pydantic import BaseModel
 from pathlib import Path
+import random
 
 class Config(BaseModel):
     input_path:str
@@ -27,6 +31,88 @@ class Master(MasterServicer):
     def __init__(self,config:Config) -> None:
         super().__init__()
         self.config = config
+        # appending the name if the nodes
+        self.node_path_list=[]
+        self.current_mapper_address=[]
+        self.current_mapper_paths=[]
+        self.current_reducer_paths=[]
+        self.current_reducer_address=[]
+        for i in range(1,6):
+            self.node_path_list.append(f'nodes/node{i}')
+
+    def transfer_mapper(self,num_mapper: int):
+        nodes = random.sample(self.node_path_list,num_mapper)
+        map_path = os.getcwd()+'/functions/map.py'
+        mapper_path= os.getcwd()+'/mapper.py'
+        for node in nodes:
+            dest_path = f'{os.getcwd()}/../{node}/mapper/'
+            self.current_mapper_paths.append(dest_path)
+            os.system(f'cp {mapper_path} {dest_path}')
+            os.system(f'cp {map_path} {dest_path}')
+
+    def transfer_input_file(self, input_path):
+        print(f'[INFO] transfering input file from folder: {input_path}')
+        for mappers in self.current_mapper_paths:
+            os.system(f'cp {input_path}/*.txt {mappers}input/')
+
+    # need testing
+    def launch_mappers(self):
+        print(f'[INFO] launching all the mappers')
+        for mapper in self.current_mapper_paths:
+            port = get_new_port()
+            self.current_mapper_address.append(f'localhost:{port}')
+            os.system(f'python3 {mapper}mapper.py {port}')
+
+    def clear_mappers(self):
+        print('[WARNING] clearing all the mappers')
+        # clearing the mappers
+        for mapper in self.current_mapper_paths:
+            os.system(f'rm -rf {mapper}mapper.py')
+            os.system(f'rm -rf {mapper}map.py')
+            os.system(f'rm -rf {mapper}input/*')
+        self.current_mapper_paths.clear()
+        self.current_mapper_address.clear()
+
+    def transfer_reducer(self,num_reducers: int):
+        nodes = random.sample(self.node_path_list,num_reducers)
+        reduce_path = os.getcwd()+'/functions/reduce.py'
+        reducer_path= os.getcwd()+'/reducer.py'
+        for node in nodes:
+            dest_path = f'{os.getcwd()}/../{node}/reducer/'
+            self.current_reducer_paths.append(dest_path)
+            os.system(f'cp {reducer_path} {dest_path}')
+            os.system(f'cp {reduce_path} {dest_path}')
+
+    # need testing
+    def launch_reducer(self):
+        print(f'[INFO] launching all the reducers')
+        for reducer in self.current_reducer_paths:
+            port = get_new_port()
+            self.current_reducer_address.append(f'localhost:{port}')
+            os.system(f'python3 {reducer}reducer.py {port}')
+
+    def clear_reducer(self):
+        print('[WARNING] clearing all the reducers')
+        # clearing the mappers
+        for reducer in self.current_reducer_paths:
+            os.system(f'rm -rf {reducer}reducer.py')
+            os.system(f'rm -rf {reducer}reduce.py')
+            os.system(f'rm -rf {reducer}input/*')
+        self.current_reducer_paths.clear()
+        self.current_reducer_address.clear()
+
+    def handle_mappers(self):
+        # tranfering required number of mappers to the nodes
+        self.transfer_mapper(self.config.n_mappers)
+        self.transfer_input_file(input_path='/home/dscd/map-reduce/src/user_input/ii')
+        input()
+        self.clear_mappers()
+
+    def handle_mappers(self):
+        # tranfering required number of reducers to the nodes
+        self.transfer_reducer(self.config.n_reducers)
+        input()
+        self.clear_reducer()
 
     def start(self):
         try:
@@ -37,6 +123,7 @@ class Master(MasterServicer):
         
             master_server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
             add_MasterServicer_to_server(self, master_server)
+            self.handle_mappers()
             print("MASTER STARTED")
             master_server.add_insecure_port("localhost:8880")
             master_server.start()
@@ -44,12 +131,6 @@ class Master(MasterServicer):
         except KeyboardInterrupt:
             print("----------CLOSING MASTER---------")
             return
-        
-    def StartMapper(self, request:Notification, context)->EmptyResponse:
-        return super().StartMapper(request, context)
-    
-    def StartReducer(self, request:Notification, context)->EmptyResponse:
-        return super().StartReducer(request, context)
 
     def NotifyMaster(self, request:EmptyResponse, context)->EmptyResponse:
         return super().NotifyMaster(request, context)
@@ -68,7 +149,7 @@ def main():
     )
     
     master = Master(config = input_data)
-    os.system("python3 mapper.py")
+    # os.system("python3 mapper.py")
     master.start()
     
 

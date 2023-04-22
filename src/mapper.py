@@ -2,6 +2,8 @@
 # already have code to read input file from the $pwd/input/*.txt
 # space to input hte mapper function
 import os
+import sys
+sys.path.append("..")
 from pathlib import Path
 from functions.map import map
 from proto.map_reduce_pb2_grpc import MasterServicer, add_MasterServicer_to_server, MasterStub
