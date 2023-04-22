@@ -3,19 +3,24 @@ package backup_protocol;
 import "google/protobuf/empty.proto";
 
 service Master {
-    rpc NotifyMaster(Notification) returns (google.protobuf.Empty);
+    rpc NotifyMaster(Response) returns (google.protobuf.Empty);
 }
 
 service Mapper{
-    rpc StartReducer(Notification) returns (google.protobuf.Empty);
+    rpc StartMapper(NotifyMapper) returns (Response);
 }
 
 service Reducer{
-    rpc StartMapper(Notification) returns (google.protobuf.Empty);
+    rpc StartReducer(NotifyReducer) returns (Response);
 }
 
-message Notification {
-    string path = 1;
+message NotifyMapper {
+    string input_path = 1;
+    int32 num_reducer = 2;
+}
+
+message NotifyReducer {
+    repeated string intermediate_path =1;
 }
 
 message Response {
