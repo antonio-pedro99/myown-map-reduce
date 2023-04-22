@@ -3,31 +3,30 @@
 # space to input hte mapper function
 import os
 import sys
-sys.path.append("..")
-from functions.reduce import reduce
+sys.path.append("../../..")
 from pathlib import Path
+from map import map
 from proto.map_reduce_pb2_grpc import MasterServicer, add_MasterServicer_to_server, MasterStub
 from proto.map_reduce_pb2 import Response, Notification
 from google.protobuf import empty_pb2 as EmptyResponse
 from utils.record_reader import RecordReader
-
 def get_input():
     # get input from input files
     pass
 
-
-def shuffle():
-    # shuffle the input
-    pass
-
-def sort():
-    #sort the input
-    pass
-
 #RPC call
-def StartReducer():
+def StartMapper():
     pass
 
 
 if __name__=='__main__':
-    reduce()
+    input_file = os.path.join('input', 'Input1.txt')
+
+    reader = RecordReader(input_file = input_file)
+
+    for key, values in reader.read():
+        for value in values:
+            processed_value = map(None, value)
+
+            #emit key-value pair
+            print(f"{key}\t{processed_value}")

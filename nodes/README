@@ -1,0 +1,4 @@
+# This is simulation of a 5 node distributed envionment. 
+
+- ## Each folder represent individual node in a distributed cluster.
+- ## Do not change or modify the folder structure
