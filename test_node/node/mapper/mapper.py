@@ -33,6 +33,20 @@ if __name__=='__main__':
     input_file = os.path.join('input', 'Input1.txt')
     reader = RecordReader(input_file = input_file)
 
+    """
+    python3 mapper.py 53240
+    Mapper function
+    for file in self.input_files_paths:
+        inputs = input(file)
+        key_value=[]
+        for line in inputs:
+            key_value.extemd(map(line))
+        for k_v in key_value:
+            num = partitioning_function(k_v[0])
+            index = num % num_reducer
+            f'output{index}.txt'.put(k_v)
+    """
+
     for key, values in reader.read():
         for value in values:
             processed_value = map(None, value)

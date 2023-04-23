@@ -14,7 +14,7 @@ from port import *
 from concurrent import futures
 from threading import Lock
 from proto.map_reduce_pb2_grpc import MasterServicer, add_MasterServicer_to_server, MasterStub
-from proto.map_reduce_pb2 import Response, Notification
+from proto.map_reduce_pb2 import Response
 from google.protobuf import empty_pb2 as EmptyResponse
 from pydantic import BaseModel
 from pathlib import Path
@@ -108,7 +108,7 @@ class Master(MasterServicer):
         input()
         self.clear_mappers()
 
-    def handle_mappers(self):
+    def handle_reducer(self):
         # tranfering required number of reducers to the nodes
         self.transfer_reducer(self.config.n_reducers)
         input()
@@ -132,8 +132,9 @@ class Master(MasterServicer):
             print("----------CLOSING MASTER---------")
             return
 
-    def NotifyMaster(self, request:EmptyResponse, context)->EmptyResponse:
-        return super().NotifyMaster(request, context)
+    # def NotifyMaster(self, request:EmptyResponse, context)->EmptyResponse:
+    #     return super().NotifyMaster(request, context)
+    # python3 mapper.py 5002
     
 def main():
     input_path = input("Enter the input data location: ")

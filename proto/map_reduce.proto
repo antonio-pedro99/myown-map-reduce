@@ -20,7 +20,10 @@ message NotifyMapper {
 }
 
 message NotifyReducer {
-    repeated string intermediate_path =1;
+    string my_index = 1;                   // 0
+    repeated string intermediate_path =2; // ['/path1/output/','/path2/output/']
+    // for out_path in intermediate_path:
+    //      os.system(f'cp {out_path}output{my_index}.txt input/')
 }
 
 message Response {

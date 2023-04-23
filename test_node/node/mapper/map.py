@@ -8,7 +8,6 @@ def map(input_value):
         value - document text
         return a list of key:value tuples like [(key1, value1),(key2, value2),...]
         if there is only one tuple than also return as a list like [(key1, value1)]
-
     """
     # this is example of word count
     terms = input_value.split(' ')
@@ -24,4 +23,4 @@ def partitioning_function(value):
         eg. 
         For Word Count => using length of word as partitioning function
     """
-    return len(value)
+    return len(value) 
