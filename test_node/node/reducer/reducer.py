@@ -55,10 +55,9 @@ def StartReducer():
 if __name__=='__main__':
     intermediate_result_paths = glob.glob("input/*.txt")
     
-    R = 1 #to be changed
+    R = 2 #to be changed
     #shuffle the results first
     shuffle(R)
-
 
     #reduce phase
     final_output = []
