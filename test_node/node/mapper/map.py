@@ -13,7 +13,7 @@ def map(input_value):
     terms = input_value.split(' ')
     pairs=[]
     for term in terms:
-        pairs.append(tuple(term, 1))
+        pairs.append((term, 1))
     return pairs
 
 def partitioning_function(value):
