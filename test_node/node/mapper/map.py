@@ -15,6 +15,7 @@ def map(input_value):
     for term in terms:
         pairs.append((term, 1))
     return pairs
+    
 
 def partitioning_function(value):
     """

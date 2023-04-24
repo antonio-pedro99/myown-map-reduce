@@ -1,4 +1,12 @@
 def reduce(key, values):
-    ## Define the reduce here
+    """
+    
+        Define your reduce function here.
 
-    print("This is the reducer")
+    """
+
+    sum_values = 0
+    for value in values:
+        sum_values += int(value)
+    
+    return key, sum_values
