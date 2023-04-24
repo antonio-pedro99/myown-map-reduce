@@ -21,6 +21,10 @@ def get_input():
     pass
 
 
+def partition(key, n_reducers):
+    value = hash(key)
+    return value % n_reducers
+
 def shuffle(n_partitions):
     """
         To shuffle the output of intermediate results from the mapper
@@ -62,12 +66,17 @@ if __name__=='__main__':
     #reduce phase
     final_output = []
     grouped_data = {}
+
     for r in range(R):
-        intermdiate_result_file = f"output/intermediate{r}.txt"
+        intermediate_result_file = f"output/intermediate{r}.txt"
        
-        with open(intermdiate_result_file, "r") as f:
+        with open(intermediate_result_file, "r") as f:
             grouped_values = [line.strip().split() for line in f]
-    
+            f.close()
+
+        #remove the intermediate result file
+        os.remove(intermediate_result_file)
+
         for key, value in grouped_values:
             if key in grouped_data:
                 grouped_data[key].append(value)
@@ -79,8 +88,9 @@ if __name__=='__main__':
             final_output.append(reducer_result)
     
 
-    for r in range(R):
-        output_file = f"output/output{r}.txt"
-        for _key, _value in final_output:
-            with open(output_file, "a") as f:
-                f.write(f"{_key} {_value}\t\n")
+    for _key, _value in final_output:
+        index = partition(_key, R)
+
+        output_file = f"output/output{index}.txt"
+        with open(output_file, "a") as f:
+            f.write(f"{_key} {_value}\t\n")
