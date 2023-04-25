@@ -29,6 +29,7 @@ class Mapper(servicer.MapperServicer):
         self.port = port
         self.num_reducer = 0
         self.mapper = None
+        self.my_path=os.path.dirname(os.path.realpath(__file__))
 
     def start(self):
         try:
@@ -50,6 +51,8 @@ class Mapper(servicer.MapperServicer):
         self.num_reducer = request.num_reducer
         self.input_files_paths = list(request.input_paths)
         print(f'path received by {self.port}: \n{request.input_paths}\n')
+        for input_path in self.input_files_paths:
+            os.system(f'cp {input_path} {self.my_path}/input/')
         thread = Thread(target=self.do_mapping)
         thread.start()
         return empty_pb2.Empty()
@@ -67,8 +70,8 @@ class Mapper(servicer.MapperServicer):
         response = notify_master_stub.NotifyMaster(
             messages.Response(response='SUCCESS')
         )
-        self.mapper.stop(None)
         print(f"----------CLOSING MAPPER [{self.port}]---------")
+        self.mapper.stop(None)
 
 
     def get_input(self):
