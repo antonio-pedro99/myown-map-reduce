@@ -10,18 +10,20 @@ FAIL: Status
 SUCCESS: Status
 
 class NotifyMapper(_message.Message):
-    __slots__ = ["input_path", "num_reducer"]
-    INPUT_PATH_FIELD_NUMBER: _ClassVar[int]
+    __slots__ = ["input_paths", "num_reducer"]
+    INPUT_PATHS_FIELD_NUMBER: _ClassVar[int]
     NUM_REDUCER_FIELD_NUMBER: _ClassVar[int]
-    input_path: str
+    input_paths: _containers.RepeatedScalarFieldContainer[str]
     num_reducer: int
-    def __init__(self, input_path: _Optional[str] = ..., num_reducer: _Optional[int] = ...) -> None: ...
+    def __init__(self, num_reducer: _Optional[int] = ..., input_paths: _Optional[_Iterable[str]] = ...) -> None: ...
 
 class NotifyReducer(_message.Message):
-    __slots__ = ["intermediate_path"]
-    INTERMEDIATE_PATH_FIELD_NUMBER: _ClassVar[int]
-    intermediate_path: _containers.RepeatedScalarFieldContainer[str]
-    def __init__(self, intermediate_path: _Optional[_Iterable[str]] = ...) -> None: ...
+    __slots__ = ["intermediate_paths", "my_index"]
+    INTERMEDIATE_PATHS_FIELD_NUMBER: _ClassVar[int]
+    MY_INDEX_FIELD_NUMBER: _ClassVar[int]
+    intermediate_paths: _containers.RepeatedScalarFieldContainer[str]
+    my_index: str
+    def __init__(self, my_index: _Optional[str] = ..., intermediate_paths: _Optional[_Iterable[str]] = ...) -> None: ...
 
 class Response(_message.Message):
     __slots__ = ["response"]

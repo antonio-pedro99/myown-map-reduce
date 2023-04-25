@@ -4,4 +4,11 @@
 /src/__pycache__
 /src/utils/__pycache__
 *__pycache__*
+*.txt
 /src/test_node/node/output
+*/node*/mapper/*.py
+*/node*/reducer/*.py
+*/node*/mapper/input/*
+*/node*/mapper/output/*
+*/node*/reducer/input/*
+*/node*/reducer/output/*

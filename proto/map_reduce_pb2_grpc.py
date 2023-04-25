@@ -79,7 +79,7 @@ class MapperStub(object):
         self.StartMapper = channel.unary_unary(
                 '/backup_protocol.Mapper/StartMapper',
                 request_serializer=proto_dot_map__reduce__pb2.NotifyMapper.SerializeToString,
-                response_deserializer=proto_dot_map__reduce__pb2.Response.FromString,
+                response_deserializer=google_dot_protobuf_dot_empty__pb2.Empty.FromString,
                 )
 
 
@@ -98,7 +98,7 @@ def add_MapperServicer_to_server(servicer, server):
             'StartMapper': grpc.unary_unary_rpc_method_handler(
                     servicer.StartMapper,
                     request_deserializer=proto_dot_map__reduce__pb2.NotifyMapper.FromString,
-                    response_serializer=proto_dot_map__reduce__pb2.Response.SerializeToString,
+                    response_serializer=google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -123,7 +123,7 @@ class Mapper(object):
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/backup_protocol.Mapper/StartMapper',
             proto_dot_map__reduce__pb2.NotifyMapper.SerializeToString,
-            proto_dot_map__reduce__pb2.Response.FromString,
+            google_dot_protobuf_dot_empty__pb2.Empty.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
@@ -140,7 +140,7 @@ class ReducerStub(object):
         self.StartReducer = channel.unary_unary(
                 '/backup_protocol.Reducer/StartReducer',
                 request_serializer=proto_dot_map__reduce__pb2.NotifyReducer.SerializeToString,
-                response_deserializer=proto_dot_map__reduce__pb2.Response.FromString,
+                response_deserializer=google_dot_protobuf_dot_empty__pb2.Empty.FromString,
                 )
 
 
@@ -159,7 +159,7 @@ def add_ReducerServicer_to_server(servicer, server):
             'StartReducer': grpc.unary_unary_rpc_method_handler(
                     servicer.StartReducer,
                     request_deserializer=proto_dot_map__reduce__pb2.NotifyReducer.FromString,
-                    response_serializer=proto_dot_map__reduce__pb2.Response.SerializeToString,
+                    response_serializer=google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -184,6 +184,6 @@ class Reducer(object):
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/backup_protocol.Reducer/StartReducer',
             proto_dot_map__reduce__pb2.NotifyReducer.SerializeToString,
-            proto_dot_map__reduce__pb2.Response.FromString,
+            google_dot_protobuf_dot_empty__pb2.Empty.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)

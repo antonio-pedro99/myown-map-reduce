@@ -14,25 +14,25 @@ _sym_db = _symbol_database.Default()
 from google.protobuf import empty_pb2 as google_dot_protobuf_dot_empty__pb2
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x16proto/map_reduce.proto\x12\x0f\x62\x61\x63kup_protocol\x1a\x1bgoogle/protobuf/empty.proto\"7\n\x0cNotifyMapper\x12\x12\n\ninput_path\x18\x01 \x01(\t\x12\x13\n\x0bnum_reducer\x18\x02 \x01(\x05\"*\n\rNotifyReducer\x12\x19\n\x11intermediate_path\x18\x01 \x03(\t\"5\n\x08Response\x12)\n\x08response\x18\x01 \x01(\x0e\x32\x17.backup_protocol.Status*\x1f\n\x06Status\x12\x0b\n\x07SUCCESS\x10\x00\x12\x08\n\x04\x46\x41IL\x10\x01\x32K\n\x06Master\x12\x41\n\x0cNotifyMaster\x12\x19.backup_protocol.Response\x1a\x16.google.protobuf.Empty2Q\n\x06Mapper\x12G\n\x0bStartMapper\x12\x1d.backup_protocol.NotifyMapper\x1a\x19.backup_protocol.Response2T\n\x07Reducer\x12I\n\x0cStartReducer\x12\x1e.backup_protocol.NotifyReducer\x1a\x19.backup_protocol.Responseb\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x16proto/map_reduce.proto\x12\x0f\x62\x61\x63kup_protocol\x1a\x1bgoogle/protobuf/empty.proto\"8\n\x0cNotifyMapper\x12\x13\n\x0bnum_reducer\x18\x01 \x01(\x05\x12\x13\n\x0binput_paths\x18\x02 \x03(\t\"=\n\rNotifyReducer\x12\x10\n\x08my_index\x18\x01 \x01(\t\x12\x1a\n\x12intermediate_paths\x18\x02 \x03(\t\"5\n\x08Response\x12)\n\x08response\x18\x01 \x01(\x0e\x32\x17.backup_protocol.Status*\x1f\n\x06Status\x12\x0b\n\x07SUCCESS\x10\x00\x12\x08\n\x04\x46\x41IL\x10\x01\x32K\n\x06Master\x12\x41\n\x0cNotifyMaster\x12\x19.backup_protocol.Response\x1a\x16.google.protobuf.Empty2N\n\x06Mapper\x12\x44\n\x0bStartMapper\x12\x1d.backup_protocol.NotifyMapper\x1a\x16.google.protobuf.Empty2Q\n\x07Reducer\x12\x46\n\x0cStartReducer\x12\x1e.backup_protocol.NotifyReducer\x1a\x16.google.protobuf.Emptyb\x06proto3')
 
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, globals())
 _builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'proto.map_reduce_pb2', globals())
 if _descriptor._USE_C_DESCRIPTORS == False:
 
   DESCRIPTOR._options = None
-  _STATUS._serialized_start=228
-  _STATUS._serialized_end=259
+  _STATUS._serialized_start=248
+  _STATUS._serialized_end=279
   _NOTIFYMAPPER._serialized_start=72
-  _NOTIFYMAPPER._serialized_end=127
-  _NOTIFYREDUCER._serialized_start=129
-  _NOTIFYREDUCER._serialized_end=171
-  _RESPONSE._serialized_start=173
-  _RESPONSE._serialized_end=226
-  _MASTER._serialized_start=261
-  _MASTER._serialized_end=336
-  _MAPPER._serialized_start=338
-  _MAPPER._serialized_end=419
-  _REDUCER._serialized_start=421
-  _REDUCER._serialized_end=505
+  _NOTIFYMAPPER._serialized_end=128
+  _NOTIFYREDUCER._serialized_start=130
+  _NOTIFYREDUCER._serialized_end=191
+  _RESPONSE._serialized_start=193
+  _RESPONSE._serialized_end=246
+  _MASTER._serialized_start=281
+  _MASTER._serialized_end=356
+  _MAPPER._serialized_start=358
+  _MAPPER._serialized_end=436
+  _REDUCER._serialized_start=438
+  _REDUCER._serialized_end=519
 # @@protoc_insertion_point(module_scope)

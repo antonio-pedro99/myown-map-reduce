@@ -6,11 +6,26 @@ def map(key, value):
 
         key - document id
         value - document text
-
+        return a list of key:value tuples like [(key1, value1),(key2, value2),...]
+        if there is only one tuple than also return as a list like [(key1, value1)]
     """
-
-    terms = value.split()
-    pairs = set()
+    # this is example of word count
+    """  terms = value.split(' ')
+    pairs=[]
     for term in terms:
-        pairs.add((term, key))
+        pairs.append((term, 1))
+    return pairs """
+    words = value.split()
+    pairs = [(word, key) for word in words]
     return pairs
+    
+
+def partitioning_function(value):
+    """
+        This method is used to partition the outputs for reducer.
+        This will be applied on the key value above
+        eg. 
+        For Word Count => using length of word as partitioning function
+    """
+    return len(value) 
+

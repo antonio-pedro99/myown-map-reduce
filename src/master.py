@@ -12,13 +12,17 @@ sys.path.append("..")
 import grpc
 from port import *
 from concurrent import futures
+from threading import Thread
 from threading import Lock
-from proto.map_reduce_pb2_grpc import MasterServicer, add_MasterServicer_to_server, MasterStub
-from proto.map_reduce_pb2 import Response
-from google.protobuf import empty_pb2 as EmptyResponse
+import proto.map_reduce_pb2_grpc as servicer
+from proto.map_reduce_pb2_grpc import MasterServicer, add_MasterServicer_to_server
+import proto.map_reduce_pb2 as messages
+from google.protobuf import empty_pb2
 from pydantic import BaseModel
 from pathlib import Path
 import random
+from time import sleep
+import glob
 
 class Config(BaseModel):
     input_path:str
@@ -50,18 +54,31 @@ class Master(MasterServicer):
             os.system(f'cp {mapper_path} {dest_path}')
             os.system(f'cp {map_path} {dest_path}')
 
-    def transfer_input_file(self, input_path):
-        print(f'[INFO] transfering input file from folder: {input_path}')
-        for mappers in self.current_mapper_paths:
-            os.system(f'cp {input_path}/*.txt {mappers}input/')
-
-    # need testing
-    def launch_mappers(self):
-        print(f'[INFO] launching all the mappers')
+    def invoke_mappers(self):
         for mapper in self.current_mapper_paths:
             port = get_new_port()
+            print(f'Invoking mapper at location: {mapper}')
             self.current_mapper_address.append(f'localhost:{port}')
-            os.system(f'python3 {mapper}mapper.py {port}')
+            os.system(f'python3 {mapper}mapper.py {port} &')
+            sleep(0.5)
+    
+    def divide_input_files(self, input_path):
+        num_mapper = self.config.n_mappers
+        path_to_send = [messages.NotifyMapper() for i in range(num_mapper)]
+        input_files = glob.glob(f'{input_path}/*.txt')
+        for i in range(len(input_files)):
+            path_to_send[i%num_mapper].input_paths.append(input_files[i])
+        return path_to_send
+
+    def start_mapper(self):
+        path_to_send = self.divide_input_files(self.config.input_path)
+        for i,mapper_addr in enumerate(self.current_mapper_address):
+            mapper = grpc.insecure_channel(mapper_addr)
+            notify_mapper_stub = servicer.MapperStub(mapper)
+            path_to_send[i].num_reducer=self.config.n_reducers
+            response = notify_mapper_stub.StartMapper(
+                path_to_send[i]
+            )
 
     def clear_mappers(self):
         print('[WARNING] clearing all the mappers')
@@ -97,15 +114,15 @@ class Master(MasterServicer):
         for reducer in self.current_reducer_paths:
             os.system(f'rm -rf {reducer}reducer.py')
             os.system(f'rm -rf {reducer}reduce.py')
-            os.system(f'rm -rf {reducer}input/*')
         self.current_reducer_paths.clear()
         self.current_reducer_address.clear()
 
     def handle_mappers(self):
         # tranfering required number of mappers to the nodes
         self.transfer_mapper(self.config.n_mappers)
-        self.transfer_input_file(input_path='/home/dscd/map-reduce/src/user_input/ii')
-        input()
+        self.invoke_mappers()
+        self.start_mapper()
+        input('Enter to clear')
         self.clear_mappers()
 
     def handle_reducer(self):
@@ -121,24 +138,30 @@ class Master(MasterServicer):
                   f"\nOutput Location = {self.config.output_path}"+
                   f"\nMappers = {self.config.n_mappers}\nReducers = {self.config.n_reducers}")
         
+            thread = Thread(target=self.handle_mappers)
+            thread.start()
+
             master_server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
             add_MasterServicer_to_server(self, master_server)
-            self.handle_mappers()
             print("MASTER STARTED")
             master_server.add_insecure_port("localhost:8880")
             master_server.start()
             master_server.wait_for_termination()
         except KeyboardInterrupt:
+            master_server.stop(None)
             print("----------CLOSING MASTER---------")
             return
 
-    # def NotifyMaster(self, request:EmptyResponse, context)->EmptyResponse:
-    #     return super().NotifyMaster(request, context)
-    # python3 mapper.py 5002
+    def NotifyMaster(self, request, context):
+        print('Notified')
+        return empty_pb2.Empty()
+    
     
 def main():
-    input_path = input("Enter the input data location: ")
-    output_path = input("Enter the output data location: ")
+    # input_path = input("Enter the input data location: ")
+    input_path = '/home/dscd/map-reduce/src/user_input/ii'
+    # output_path = input("Enter the output data location: ")
+    output_path = '/home/dscd/map-reduce/src/user_output'
     num_mappers = int(input("Enter the number of mappers: "))
     num_reducers = int(input("Enter the number of reducers: "))
     

@@ -7,21 +7,21 @@ service Master {
 }
 
 service Mapper{
-    rpc StartMapper(NotifyMapper) returns (Response);
+    rpc StartMapper(NotifyMapper) returns (google.protobuf.Empty);
 }
 
 service Reducer{
-    rpc StartReducer(NotifyReducer) returns (Response);
+    rpc StartReducer(NotifyReducer) returns (google.protobuf.Empty);
 }
 
 message NotifyMapper {
-    string input_path = 1;
-    int32 num_reducer = 2;
+    int32 num_reducer = 1;
+    repeated string input_paths = 2;
 }
 
 message NotifyReducer {
     string my_index = 1;                   // 0
-    repeated string intermediate_path =2; // ['/path1/output/','/path2/output/']
+    repeated string intermediate_paths =2; // ['/path1/output/','/path2/output/']
     // for out_path in intermediate_path:
     //      os.system(f'cp {out_path}output{my_index}.txt input/')
 }
