@@ -13,7 +13,7 @@ def map(input_value):
     terms = input_value.split(' ')
     pairs=[]
     for term in terms:
-        pairs.append((term.lower(), 1))
+        pairs.append((term, 1))
     return pairs
     
 

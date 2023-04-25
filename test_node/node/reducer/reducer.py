@@ -78,14 +78,15 @@ if __name__=='__main__':
         os.remove(intermediate_result_file)
 
         for key, value in grouped_values:
+            key = key.lower()
             if key in grouped_data:
                 grouped_data[key].append(value)
             else:
                 grouped_data[key] = [value]
                 
-        for k, values in grouped_data.items():
-            reducer_result = reduce(k, values)
-            final_output.append(reducer_result)
+    for k, values in sorted(grouped_data.items()):
+        reducer_result = reduce(k, values)
+        final_output.append(reducer_result)
     
 
     for _key, _value in final_output:

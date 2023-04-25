@@ -14,8 +14,7 @@ from utils.record_reader import RecordReader
 
 
 def partition(key, n_reducers):
-    value = hash(key)
-    return value % n_reducers
+    return hash(key) % n_reducers
 
 class Mapper(servicer.MapperServicer):
 
@@ -53,6 +52,8 @@ if __name__=='__main__':
             for v in values:
                 key_values.extend(map(v))
       
+
+        print(key_values)
         for k_v in key_values:
                 index = partition(k_v[0], 2)
             
