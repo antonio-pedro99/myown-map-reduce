@@ -1,4 +1,4 @@
-def map(input_value):
+def map(key, value):
     """
         Define your mapper logic here. 
         The following code applies only on inverted index** for testing purpose
@@ -10,10 +10,13 @@ def map(input_value):
         if there is only one tuple than also return as a list like [(key1, value1)]
     """
     # this is example of word count
-    terms = input_value.split(' ')
+    """  terms = value.split(' ')
     pairs=[]
     for term in terms:
         pairs.append((term, 1))
+    return pairs """
+    words = value.split()
+    pairs = [(word, key) for word in words]
     return pairs
     
 
@@ -25,3 +28,4 @@ def partitioning_function(value):
         For Word Count => using length of word as partitioning function
     """
     return len(value) 
+

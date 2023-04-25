@@ -5,8 +5,11 @@ def reduce(key, values):
 
     """
 
-    sum_values = 0
+    """  sum_values = 0
     for value in values:
         sum_values += int(value)
     
-    return key, sum_values
+    return key, sum_values """
+    print(values)
+    doc_ids = list(set(pair[-1] for pair in values))
+    return (key, (doc_ids))

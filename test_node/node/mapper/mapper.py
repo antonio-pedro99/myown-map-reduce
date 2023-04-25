@@ -43,15 +43,16 @@ if __name__=='__main__':
   
     """
 
-    for file in input_files_paths:
+    id = 1
+    for file in sorted(input_files_paths):
         reader = RecordReader(input_file = file)
         key_values = []
 
+       
         for key, values in reader.read():
            
             for v in values:
-                key_values.extend(map(v))
-      
+                key_values.extend(map(id, v))
 
         print(key_values)
         for k_v in key_values:
@@ -61,4 +62,5 @@ if __name__=='__main__':
                     k, v = k_v
                     inter.write(f"{k}, {v}\t\n")
                     inter.close()
+        id += 1
 
