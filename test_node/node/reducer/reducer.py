@@ -94,4 +94,8 @@ if __name__=='__main__':
 
         output_file = f"output/output{index}.txt"
         with open(output_file, "a") as f:
-            f.write(f"{_key} {_value}\t\n")
+        
+            if isinstance(_value, list):
+                f.write(f"{_key} {' '.join(e for e in _value)}\t\n")
+            else:
+                f.write(f"{_key} {_value}\t\n")
