@@ -52,7 +52,6 @@ class Reducer(servicer.ReducerServicer):
         self.num_mapper = request.num_mapper
         self.my_index = request.my_index
         self.input_files_paths = list(request.intermediate_paths)
-        print(f'REDUCER received path  {self.port}: \n{request.intermediate_paths}\n')
         with open(f"{self.my_path}/input/input.txt", "a") as all_inter:
             for input_path in self.input_files_paths:
                 with open(f'{input_path}/output{self.my_index}.txt') as inter:
@@ -84,11 +83,6 @@ class Reducer(servicer.ReducerServicer):
         )
         print(f"----------CLOSING REDUCER [{self.port}]---------")
         self.reducer.stop(None)
-
-
-    def get_input(self):
-        # get input from input files
-        pass
 
 
 def main():

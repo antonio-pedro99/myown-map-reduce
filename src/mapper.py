@@ -81,11 +81,6 @@ class Mapper(servicer.MapperServicer):
         self.mapper.stop(None)
 
 
-    def get_input(self):
-        # get input from input files
-        pass
-
-
 def main():
     mapper = Mapper(sys.argv[1])
     mapper.start()
