@@ -6,7 +6,7 @@ import sys
 sys.path.append("../../..")
 from pathlib import Path
 import glob
-from reduce import reduce
+from reduce import reduce, reduce_natural
 import proto.map_reduce_pb2_grpc as servicer
 import proto.map_reduce_pb2 as messages
 from google.protobuf import empty_pb2 as EmptyResponse
@@ -41,7 +41,7 @@ def shuffle(n_partitions):
         
         groups = defaultdict(list)
 
-        for key, value in intermediate_results:
+        for _, key, value in intermediate_results:
             groups[key].append(value)
         
         out_file = f"output/intermediate{r}.txt"
@@ -85,11 +85,12 @@ if __name__=='__main__':
                 grouped_data[key] = [value]
                 
     for k, values in sorted(grouped_data.items()):
-        reducer_result = reduce(k, values)
+        reducer_result = reduce_natural(k, values)
         final_output.append(reducer_result)
     
 
-    for _key, _value in final_output:
+    print(final_output)
+    for _, _key, _value in final_output:
         index = partition(_key, R)
 
         output_file = f"output/output{index}.txt"

@@ -10,6 +10,10 @@ def reduce(key, values):
         sum_values += int(value)
     
     return key, sum_values """
-    print(values)
-    doc_ids = list(set(pair[-1] for pair in values))
-    return (key, (doc_ids))
+    pass
+
+def reduce_natural(key, values):
+    table1_data = None
+    table2_data = None
+    
+    pass
