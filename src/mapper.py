@@ -5,7 +5,7 @@ import os
 import sys
 sys.path.append("..")
 from pathlib import Path
-from map import map, partitioning_function
+from map import map
 from google.protobuf import empty_pb2
 import glob
 import grpc
@@ -25,8 +25,9 @@ class Mapper(servicer.MapperServicer):
 
     def __init__(self, port) -> None:
         super().__init__()
-        self.input_files_paths = None
+        self.input_files_paths = []
         self.port = port
+        self.my_index = 0
         self.num_reducer = 0
         self.mapper = None
         self.my_path=os.path.dirname(os.path.realpath(__file__))
@@ -49,8 +50,9 @@ class Mapper(servicer.MapperServicer):
 
     def StartMapper(self, request, context):
         self.num_reducer = request.num_reducer
+        self.my_index = request.my_index
         self.input_files_paths = list(request.input_paths)
-        print(f'path received by {self.port}: \n{request.input_paths}\n')
+        # print(f'path received by {self.port}: \n{request.input_paths}\n')
         for input_path in self.input_files_paths:
             os.system(f'cp {input_path} {self.my_path}/input/')
         thread = Thread(target=self.do_mapping)
@@ -59,6 +61,11 @@ class Mapper(servicer.MapperServicer):
 
 
     def do_mapping(self):
+        """
+        Here we will pass all the input file path to the map function that will take care of the rest
+        send=> my_index and my_path/input 
+        """
+        map(self.my_index, f'{self.my_path}/input', self.num_reducer)
         # DO THE REQUIRED MAPPING WORK
         self.notify_master()
 
@@ -68,7 +75,7 @@ class Mapper(servicer.MapperServicer):
         master = grpc.insecure_channel('localhost:8880')
         notify_master_stub = servicer.MasterStub(master)
         response = notify_master_stub.NotifyMaster(
-            messages.Response(response='SUCCESS')
+            messages.Response(response='MAPPER')
         )
         print(f"----------CLOSING MAPPER [{self.port}]---------")
         self.mapper.stop(None)
@@ -88,34 +95,4 @@ if __name__=='__main__':
         main()
     except:
         exit
-    # input_files_paths = glob.glob("input/*.txt")
-    # #input_file = os.path.join('input', 'Input1.txt')
-    # #reader = RecordReader(input_file = input_file)
-
-    # """
-    # python3 mapper.py 53240
-    # Mapper function
-  
-    # """
-
-    # id = 1
-    # for file in sorted(input_files_paths):
-    #     reader = RecordReader(input_file = file)
-    #     key_values = []
-
-       
-    #     for key, values in reader.read():
-           
-    #         for v in values:
-    #             key_values.extend(map(id, v))
-
-    #     print(key_values)
-    #     for k_v in key_values:
-    #             index = partition(k_v[0], 2)
-            
-    #             with open(f"output/output{index}.txt", "a") as inter:
-    #                 k, v = k_v
-    #                 inter.write(f"{k}, {v}\t\n")
-    #                 inter.close()
-    #     id += 1
 

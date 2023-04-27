@@ -36,11 +36,14 @@ class Master(MasterServicer):
         super().__init__()
         self.config = config
         # appending the name if the nodes
+        self.num_mapper_notified = 0
+        self.num_reducer_notified = 0
         self.node_path_list=[]
         self.current_mapper_address=[]
         self.current_mapper_paths=[]
         self.current_reducer_paths=[]
         self.current_reducer_address=[]
+        
         for i in range(1,6):
             self.node_path_list.append(f'nodes/node{i}')
 
@@ -76,8 +79,24 @@ class Master(MasterServicer):
             mapper = grpc.insecure_channel(mapper_addr)
             notify_mapper_stub = servicer.MapperStub(mapper)
             path_to_send[i].num_reducer=self.config.n_reducers
+            path_to_send[i].my_index=(i+1)
             response = notify_mapper_stub.StartMapper(
                 path_to_send[i]
+            )
+
+
+    def start_reducer(self):
+        intermediate_path = [f'{path}output' for path in self.current_mapper_paths]
+        for i,reducer_addr in enumerate(self.current_reducer_address):
+            print('list ',self.current_reducer_address)
+            messages_to_send = messages.NotifyReducer()
+            messages_to_send.my_index = (i+1)
+            messages_to_send.num_mapper = self.config.n_mappers
+            messages_to_send.intermediate_paths.extend(intermediate_path)
+            reducer = grpc.insecure_channel(reducer_addr)
+            notify_mapper_stub = servicer.ReducerStub(reducer)
+            response = notify_mapper_stub.StartReducer(
+                messages_to_send
             )
 
     def clear_mappers(self):
@@ -87,8 +106,10 @@ class Master(MasterServicer):
             os.system(f'rm -rf {mapper}mapper.py')
             os.system(f'rm -rf {mapper}map.py')
             os.system(f'rm -rf {mapper}input/*')
+            os.system(f'rm -rf {mapper}output/*')
         self.current_mapper_paths.clear()
         self.current_mapper_address.clear()
+
 
     def transfer_reducer(self,num_reducers: int):
         nodes = random.sample(self.node_path_list,num_reducers)
@@ -100,13 +121,13 @@ class Master(MasterServicer):
             os.system(f'cp {reducer_path} {dest_path}')
             os.system(f'cp {reduce_path} {dest_path}')
 
-    # need testing
-    def launch_reducer(self):
-        print(f'[INFO] launching all the reducers')
+    def invoke_reducer(self):
         for reducer in self.current_reducer_paths:
             port = get_new_port()
+            print(f'Invoking reducer at location: {reducer}')
             self.current_reducer_address.append(f'localhost:{port}')
-            os.system(f'python3 {reducer}reducer.py {port}')
+            os.system(f'python3 {reducer}reducer.py {port} &')
+            sleep(0.5)
 
     def clear_reducer(self):
         print('[WARNING] clearing all the reducers')
@@ -114,6 +135,8 @@ class Master(MasterServicer):
         for reducer in self.current_reducer_paths:
             os.system(f'rm -rf {reducer}reducer.py')
             os.system(f'rm -rf {reducer}reduce.py')
+            os.system(f'rm -rf {reducer}input/*')
+            os.system(f'rm -rf {reducer}output/*')
         self.current_reducer_paths.clear()
         self.current_reducer_address.clear()
 
@@ -122,13 +145,14 @@ class Master(MasterServicer):
         self.transfer_mapper(self.config.n_mappers)
         self.invoke_mappers()
         self.start_mapper()
-        input('Enter to clear')
-        self.clear_mappers()
 
     def handle_reducer(self):
         # tranfering required number of reducers to the nodes
         self.transfer_reducer(self.config.n_reducers)
-        input()
+        self.invoke_reducer()
+        self.start_reducer()
+        input("Press enter to clear both mapper and reducer")
+        self.clear_mappers()
         self.clear_reducer()
 
     def start(self):
@@ -153,7 +177,18 @@ class Master(MasterServicer):
             return
 
     def NotifyMaster(self, request, context):
-        print('Notified')
+        print('NOTIFIED')
+        if request.response == 0:
+            self.num_mapper_notified += 1
+        if request.response == 1:
+            self.num_reducer_notified += 1
+        if self.num_mapper_notified == self.config.n_mappers:
+            self.num_mapper_notified=0
+            thread = Thread(target = self.handle_reducer)
+            thread.start()
+        if self.num_reducer_notified == self.config.n_reducers:
+            self.num_reducer_notified=0
+            print('ALL DONE')
         return empty_pb2.Empty()
     
     

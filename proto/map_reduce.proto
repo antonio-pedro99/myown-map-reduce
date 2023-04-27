@@ -15,13 +15,15 @@ service Reducer{
 }
 
 message NotifyMapper {
-    int32 num_reducer = 1;
-    repeated string input_paths = 2;
+    int32 my_index = 1;
+    int32 num_reducer = 2;
+    repeated string input_paths = 3;
 }
 
 message NotifyReducer {
-    string my_index = 1;                   // 0
-    repeated string intermediate_paths =2; // ['/path1/output/','/path2/output/']
+    int32 my_index = 1;
+    int32 num_mapper = 2;                   // 0
+    repeated string intermediate_paths =3; // ['/path1/output/','/path2/output/']
     // for out_path in intermediate_path:
     //      os.system(f'cp {out_path}output{my_index}.txt input/')
 }
@@ -31,6 +33,6 @@ message Response {
 }
 
 enum Status {
-    SUCCESS = 0;
-    FAIL = 1;
+    MAPPER = 0;
+    REDUCER = 1;
 }
