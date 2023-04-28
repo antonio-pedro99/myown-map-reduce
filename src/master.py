@@ -88,7 +88,6 @@ class Master(MasterServicer):
     def start_reducer(self):
         intermediate_path = [f'{path}output' for path in self.current_mapper_paths]
         for i,reducer_addr in enumerate(self.current_reducer_address):
-            print('list ',self.current_reducer_address)
             messages_to_send = messages.NotifyReducer()
             messages_to_send.my_index = (i+1)
             messages_to_send.num_mapper = self.config.n_mappers
@@ -137,8 +136,13 @@ class Master(MasterServicer):
             os.system(f'rm -rf {reducer}reduce.py')
             os.system(f'rm -rf {reducer}input/*')
             os.system(f'rm -rf {reducer}output/*')
+            os.system(f'rm -rf {self.config.output_path}/*.txt')
         self.current_reducer_paths.clear()
         self.current_reducer_address.clear()
+    
+    def collect_outputs(self):
+        for path in self.current_reducer_paths:
+            os.system(f'cp {path}output/output*.txt {self.config.output_path}/')
 
     def handle_mappers(self):
         # tranfering required number of mappers to the nodes
@@ -177,7 +181,7 @@ class Master(MasterServicer):
             return
 
     def NotifyMaster(self, request, context):
-        print('NOTIFIED')
+        print('NOTIFIED MASTER OF COMPLETION')
         if request.response == 0:
             self.num_mapper_notified += 1
         if request.response == 1:
@@ -188,6 +192,7 @@ class Master(MasterServicer):
             thread.start()
         if self.num_reducer_notified == self.config.n_reducers:
             self.num_reducer_notified=0
+            self.collect_outputs()
             print('ALL DONE')
         return empty_pb2.Empty()
     

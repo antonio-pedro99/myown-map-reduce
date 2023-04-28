@@ -14,6 +14,7 @@ def main():
         os.system(f'rm -rf {node}/reducer/input/*.txt')
         os.system(f'rm -rf {node}/reducer/output/*.txt')
         os.system(f'rm -rf {node}/reducer/*.py')
+        os.system(f'rm -rf {os.getcwd()}/user_output/*.txt')
 
 if __name__=='__main__':
     main()  

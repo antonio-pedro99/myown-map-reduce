@@ -75,7 +75,6 @@ class Reducer(servicer.ReducerServicer):
 
 
     def notify_master(self):
-        sleep(1)
         master = grpc.insecure_channel('localhost:8880')
         notify_master_stub = servicer.MasterStub(master)
         response = notify_master_stub.NotifyMaster(
