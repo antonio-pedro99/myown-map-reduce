@@ -198,8 +198,8 @@ class Master(MasterServicer):
     
     
 def main():
-    input_path = input("Enter the input data location: ")
-    # input_path = '/home/dscd/map-reduce/src/user_input/nj'
+    # input_path = input("Enter the input data location: ")
+    input_path = '/home/dscd/map-reduce/src/user_input/nj'
     output_path = input("Enter the output data location: ")
     if output_path=='':
         output_path = '/home/dscd/map-reduce/src/user_output'
