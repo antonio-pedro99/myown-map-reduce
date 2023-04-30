@@ -104,8 +104,8 @@ class Master(MasterServicer):
         for mapper in self.current_mapper_paths:
             os.system(f'rm -rf {mapper}mapper.py')
             os.system(f'rm -rf {mapper}map.py')
-            os.system(f'rm -rf {mapper}input/*')
-            os.system(f'rm -rf {mapper}output/*')
+            os.system(f'rm -rf {mapper}input/*.txt')
+            os.system(f'rm -rf {mapper}output/*.txt')
         self.current_mapper_paths.clear()
         self.current_mapper_address.clear()
 
@@ -134,8 +134,8 @@ class Master(MasterServicer):
         for reducer in self.current_reducer_paths:
             os.system(f'rm -rf {reducer}reducer.py')
             os.system(f'rm -rf {reducer}reduce.py')
-            os.system(f'rm -rf {reducer}input/*')
-            os.system(f'rm -rf {reducer}output/*')
+            os.system(f'rm -rf {reducer}input/*.txt')
+            os.system(f'rm -rf {reducer}output/*.txt')
             os.system(f'rm -rf {self.config.output_path}/*.txt')
         self.current_reducer_paths.clear()
         self.current_reducer_address.clear()
@@ -198,8 +198,8 @@ class Master(MasterServicer):
     
     
 def main():
-    # input_path = input("Enter the input data location: ")
-    input_path = '/home/dscd/map-reduce/src/user_input/nj'
+    input_path = input("Enter the input data location: ")
+    # input_path = '/home/dscd/map-reduce/src/user_input/nj'
     output_path = input("Enter the output data location: ")
     if output_path=='':
         output_path = '/home/dscd/map-reduce/src/user_output'
