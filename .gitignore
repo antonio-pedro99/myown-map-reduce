@@ -5,7 +5,7 @@
 /src/utils/__pycache__
 *__pycache__*
 *.txt
-/src/test_node/node/output
+# /src/test_node/node/output
 # */mapper/*.py
 # */reducer/*.py
 # */mapper/input/*
