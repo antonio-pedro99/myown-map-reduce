@@ -14,8 +14,6 @@ from threading import Thread
 from concurrent import futures
 import proto.map_reduce_pb2_grpc as servicer
 import proto.map_reduce_pb2 as messages
-from google.protobuf import empty_pb2 as EmptyResponse
-from utils.record_reader import RecordReader
 
 
 def partition(key, n_reducers):

@@ -1,6 +1,0 @@
-17, tb1, Tom	
-100, tb1, Kevin	
-Role, tb2, Name	
-CEO, tb2, John	
-Manager, tb2, Tom	
-Intern, tb2, Kevin	
