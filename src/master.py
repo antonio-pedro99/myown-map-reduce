@@ -199,7 +199,7 @@ class Master(MasterServicer):
     
 def main():
     # input_path = input("Enter the input data location: ")
-    input_path = '/home/dscd/map-reduce/src/user_input/ii'
+    input_path = '/home/dscd/map-reduce/src/user_input/nj'
     # output_path = input("Enter the output data location: ")
     output_path = '/home/dscd/map-reduce/src/user_output'
     num_mappers = int(input("Enter the number of mappers: "))
@@ -213,7 +213,6 @@ def main():
     )
     
     master = Master(config = input_data)
-    # os.system("python3 mapper.py")
     master.start()
     
 

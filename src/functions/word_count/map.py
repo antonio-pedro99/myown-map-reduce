@@ -7,6 +7,11 @@ import glob
 def map(my_index, file_path, n_reducers):
     print(f'Mapper Index: {my_index}\tPath: {file_path}')
     input_files_paths = glob.glob(f"{file_path}/*.txt")
+    
+    for index in range(n_reducers):
+        with open(f"{file_path}/../output/output{index+1}.txt", "a") as inter:
+            inter.close()
+
     values = []
     for file in sorted(input_files_paths):
         with open(file, 'r') as f:

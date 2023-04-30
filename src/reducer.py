@@ -87,6 +87,7 @@ class Reducer(servicer.ReducerServicer):
 def main():
     reducer = Reducer(sys.argv[1])
     reducer.start()
+    pass
 
 if __name__=='__main__':
     try:
