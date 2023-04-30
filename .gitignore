@@ -6,8 +6,8 @@
 *__pycache__*
 *.txt
 /src/test_node/node/output
-*/mapper/*.py
-*/reducer/*.py
+# */mapper/*.py
+# */reducer/*.py
 # */mapper/input/*
 # */mapper/output/*
 # */reducer/input/*
