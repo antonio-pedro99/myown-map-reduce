@@ -1,4 +1,4 @@
-# map-reduce
+# MapReduce
 A Simple implementation of map reduce. 
 
 ## How to run the map-reduce program:
